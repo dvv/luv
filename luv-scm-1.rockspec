@@ -4,16 +4,31 @@ source = {
   url = "git://github.com/dvv/luv.git"
 }
 description = {
-  summary  = "libuv binding for Lua",
+  summary  = "Luv",
   detailed = "",
-  homepage = "https://github.com/creationix/luv",
-  license  = "",
+  homepage = "http://github.com/creationix/luv",
+  license  = "MIT",
 }
 dependencies = {
-  "lua >= 5.1"
+    "lua >= 5.1"
 }
 build = {
-  type = "command",
-  build_command = "cmake -E make_directory build && cd build && cmake -D INSTALL_CMOD=$(LIBDIR) .. && $(MAKE)",
-  install_command = "cd build && $(MAKE) install",
+  type = "builtin",
+  modules = {
+    luv = {
+      sources = {
+        "common.c",
+        "luv_functions.c",
+        "luv.c"
+      },
+      defines = {
+        "LUV_STACK_CHECK=1",
+        "_LARGEFILE_SOURCE",
+        "_FILE_OFFSET_BITS=64"
+      },
+      libraries = { "uv", "m", "pthread", "rt" },
+      incdirs = {"libuv/include"},
+      libdirs = {"libuv"},
+    }
+  },
 }
